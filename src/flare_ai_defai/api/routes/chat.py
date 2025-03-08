@@ -12,6 +12,7 @@ The module provides a ChatRouter class that integrates various services:
 """
 
 import json
+import re
 
 import structlog
 from fastapi import APIRouter, HTTPException
@@ -249,20 +250,24 @@ class ChatRouter:
         if not self.blockchain.address:
             await self.handle_generate_account(message)
 
-        prompt, mime_type, schema = self.prompts.get_formatted_prompt(
-            "token_send", user_input=message
-        )
+        # Extract the first number in the message for amount
+        amount_match = re.search(r'\d+(?:\.\d+)?', message)
+        if not amount_match:
+            raise ValueError("No valid amount found in message")
+        
+        # Find Ethereum address (0x followed by 40 hex chars)
+        address_match = re.search(r'0x[0-9a-fA-F]{40}\b', message)
+        if not address_match:
+            raise ValueError("No valid Ethereum address found in message")
+        
+        send_token_json = {
+            "to_address": address_match.group(),
+            "amount": float(amount_match.group()),
+        }
         # send_token_response = self.ai.generate(
         #     prompt=prompt, response_mime_type=mime_type, response_schema=schema
         # )
 
-        split = message.split(" ")
-
-        send_token_json = {
-            "to_address": split[4],
-            "amount": float(split[1]),
-        }
-        # send_token_json = json.loads(send_token_response.text)
         expected_json_len = 2
         self.logger.debug("send_token_json", json=send_token_json)
         if (
