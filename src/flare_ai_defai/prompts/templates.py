@@ -69,6 +69,8 @@ Ready to start exploring the Flare network?"
 """
 
 TOKEN_SEND: Final = """
+You are a tool to extract wallet address and a numerical amount from text 
+
 Extract EXACTLY two pieces of information from the input text for a token send operation:
 
 1. DESTINATION ADDRESS
@@ -92,7 +94,13 @@ Extract EXACTLY two pieces of information from the input text for a token send o
    • Extract first valid number only
    • FAIL if no valid amount found
 
+
 Input: ${user_input}
+
+Examples:
+✓ "Send 100 C2FLR to 0x8F63Aa5704d732678aC8a3A22E8F679894357408" → {"to_address": "0x8F63Aa5704d732678aC8a3A22E8F679894357408", "amount": 100.0}
+✓ "Send 100 BTC to 0x8F63Aa5704d732678aC8a3A22E8F679894357408" → {"to_address": "0x8F63Aa5704d732678aC8a3A22E8F679894357408", "amount": 100.0}
+Explanaton: The response must be a valid JSON object with the correct format and CORRECT QUOTES.
 
 Rules:
 - Both fields MUST be present
@@ -101,6 +109,14 @@ Rules:
 - DO NOT infer missing values
 - DO NOT modify the address
 - FAIL if either value is missing or invalid
+
+Return the TWO PIECES of information in this format:
+
+Response format:
+{
+  "to_address": <address>,
+  "amount": <float_value>
+}
 """
 
 TOKEN_SWAP: Final = """

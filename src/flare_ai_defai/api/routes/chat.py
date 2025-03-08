@@ -252,11 +252,19 @@ class ChatRouter:
         prompt, mime_type, schema = self.prompts.get_formatted_prompt(
             "token_send", user_input=message
         )
-        send_token_response = self.ai.generate(
-            prompt=prompt, response_mime_type=mime_type, response_schema=schema
-        )
-        send_token_json = json.loads(send_token_response.text)
+        # send_token_response = self.ai.generate(
+        #     prompt=prompt, response_mime_type=mime_type, response_schema=schema
+        # )
+
+        split = message.split(" ")
+
+        send_token_json = {
+            "to_address": split[4],
+            "amount": float(split[1]),
+        }
+        # send_token_json = json.loads(send_token_response.text)
         expected_json_len = 2
+        self.logger.debug("send_token_json", json=send_token_json)
         if (
             len(send_token_json) != expected_json_len
             or send_token_json.get("amount") == 0.0
