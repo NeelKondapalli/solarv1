@@ -268,7 +268,7 @@ export function Chat() {
                 icon={<Figma className="w-5 h-5" />}
                 label="Send Tokens"
                 onClick={() => {
-                  setValue("I want to send tokens");
+                  setValue("Send 1 XYZ to 0x123...");
                   handleSend();
                 }}
               />
@@ -276,15 +276,15 @@ export function Chat() {
                 icon={<FileUp className="w-5 h-5" />}
                 label="Swap Tokens"
                 onClick={() => {
-                  setValue("Help me swap tokens");
+                  setValue("Swap 1 ___ for ___");
                   handleSend();
                 }}
               />
               <ActionButton
                 icon={<MonitorIcon className="w-5 h-5" />}
-                label="Check Balance"
+                label="Market Info"
                 onClick={() => {
-                  setValue("Check my wallet balance");
+                  setValue("Show me the biggest movers recently");
                   handleSend();
                 }}
               />
@@ -293,7 +293,7 @@ export function Chat() {
                 icon={<LineChart className="w-5 h-5" />}
                 label="Coin Info"
                 onClick={() => {
-                  setValue("Show me coin info");
+                  setValue("Show me coin info for FLR");
                   handleSend();
                 }}
               />

@@ -90,6 +90,8 @@ class ChatRouter:
 
         self.session = None
 
+        self.context = ""
+
     def _setup_routes(self) -> None:
         """
         Set up FastAPI routes for the chat endpoint.
@@ -146,6 +148,8 @@ class ChatRouter:
                         resp = f"The attestation failed with  error:\n{e.args[0]}"
                     self.attestation.attestation_requested = False
                     return {"response": resp}
+
+                self.context += message.message + "\n"
 
                 route = await self.get_semantic_route(message.message)
                 return await self.route_message(route, message.message)
@@ -246,6 +250,7 @@ class ChatRouter:
         gen_address_response = self.ai.generate(
             prompt=prompt, response_mime_type=mime_type, response_schema=schema
         )
+        self.context += gen_address_response.text + "\n"
         return {"response": gen_address_response.text}
 
     async def handle_send_token(self, message: str) -> dict[str, str]:
@@ -300,6 +305,7 @@ class ChatRouter:
             + f"Sending {Web3.from_wei(tx.get('value', 0), 'ether')} "
             + f"FLR to {tx.get('to')}\nType CONFIRM TRANSACTION to proceed."
         )
+        self.context += formatted_preview + "\n"
         return {"response": formatted_preview}
 
     async def handle_swap_token(self, message: str) -> dict[str, str]:
@@ -351,12 +357,13 @@ class ChatRouter:
         # Return preview with approval notice if needed
         approval_notice = "\n(Note: You'll need to approve the token spend first)" if from_token != "FLR" else ""
         formatted_preview = (
-            f"Preview swap transaction:\n"
+            f"Swap transaction:\n"
             f"Token In: {from_token}\n"
             f"Token Out: {to_token}\n"
             f"Amount: {from_amount}{approval_notice}\n"
             # f"Type CONFIRM SWAP to proceed."
         )
+        self.context += formatted_preview + "\n"
         
         return {"response": formatted_preview}
 
@@ -373,6 +380,9 @@ class ChatRouter:
         prompt = self.prompts.get_formatted_prompt("request_attestation")[0]
         request_attestation_response = self.ai.generate(prompt=prompt)
         self.attestation.attestation_requested = True
+
+        self.context += request_attestation_response.text + "\n"
+
         return {"response": request_attestation_response.text}
 
     async def handle_conversation(self, message: str) -> dict[str, str]:
@@ -385,7 +395,8 @@ class ChatRouter:
         Returns:
             dict[str, str]: Response from AI provider
         """
-        response = self.ai.send_message(message)
+        response = self.ai.send_message(self.context + "\n" + message)
+        self.context += response.text + "\n"
         return {"response": response.text}
 
     def create_ascii_chart(self, prices: list[float], max_width: int = 20, max_height: int = 10) -> list[str]:
@@ -535,7 +546,7 @@ class ChatRouter:
         chart.append(label_line)
 
         
-
+        self.context += "\n".join(chart) + "\n"
         return chart
 
 
@@ -601,6 +612,7 @@ class ChatRouter:
                 historical_data.append((price, formatted_time, days_ago + 1))
 
         
+        self.context += "\n" + str(historical_data) + "\n"
 
         return historical_data
 
@@ -845,7 +857,7 @@ class ChatRouter:
                     ]
 
                 
-
+                self.context += "\n" + str(response) + "\n"
                 return {"response": "\n".join(response)}
 
                 
@@ -1077,6 +1089,7 @@ class ChatRouter:
             ])
 
 
+            self.context += "\n" + "\n".join(response_lines) + "\n"
 
             return {"response": "\n".join(response_lines)}
 
