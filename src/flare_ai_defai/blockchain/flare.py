@@ -16,6 +16,8 @@ from web3.types import TxParams
 from .abi import SWAP_ROUTER_ABI, WFLR_ABI, JOULE_ABI, USDC_ABI
 import eth_abi 
 from web3.middleware import ExtraDataToPOAMiddleware
+from .explorer import FlareExplorer
+
 
 
 @dataclass
@@ -64,6 +66,7 @@ class FlareProvider:
         # from web3.middleware import ExtraDataToPOAMiddleware
         # self.w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
         self.logger = logger.bind(router="flare_provider")
+        self.explorer = FlareExplorer("https://flare-explorer.flare.network/api")
 
     def reset(self) -> None:
         """
@@ -220,19 +223,35 @@ class FlareProvider:
             "wflr": "0x1D80c49BbBCd1C0911346656B529DF9E5c2F783d",
             "joule": "0xE6505f92583103AF7ed9974DEC451A7Af4e3A3bE",
             "usdc": "0xFbDa5F676cB37624f28265A144A48B0d6e87d3b6",
+            "usdt": "0x0B38e83B86d491735fEaa0a791F65c2B99535396",
+            "weth": "0x1502FA4be69d526124D453619276FacCab275d3D"
+
         }
 
-        token_abi = {
-            "wflr": WFLR_ABI,
-            "joule": JOULE_ABI,
-            "usdc": USDC_ABI
+        token_address_abi = {
+            "wflr": "0x1D80c49BbBCd1C0911346656B529DF9E5c2F783d",
+            "joule": "0xEE15da0edB70FC6D98D03651F949FcCc2C4e1E80",
+            "usdc": "0x3AdAE7Ad0449e26ad2e95059e08CC29ECB93E194",
+            "usdt": "0x0B38e83B86d491735fEaa0a791F65c2B99535396",
+            "weth": "0x1502FA4be69d526124D453619276FacCab275d3D"
+
         }
+
+        # token_abi = {
+        #     "wflr": WFLR_ABI,
+        #     "joule": JOULE_ABI,
+        #     "usdc": USDC_ABI
+        # }
 
         token_in_address = token_address[token_in.lower()]
         token_out_address = token_address[token_out.lower()]
 
-        token_in_abi = token_abi[token_in.lower()]
-        token_out_abi = token_abi[token_out.lower()]
+        # token_in_abi = token_abi[token_in.lower()]
+        # token_out_abi = token_abi[token_out.lower()]
+
+        token_in_abi = self.explorer.get_contract_abi(contract_address=token_address_abi[token_in.lower()])
+        token_out_abi = self.explorer.get_contract_abi(contract_address=token_address_abi[token_out.lower()])
+        
         
         universal_router = self.w3.eth.contract(address=universal_router_address, abi=SWAP_ROUTER_ABI)
         contract_in = self.w3.eth.contract(address=token_in_address, abi=token_in_abi)
