@@ -1,9 +1,11 @@
 import React from 'react';
 import { Chat } from './components/Chat';
+import { AuroraBackground } from "./components/ui/aurora-background";
+import { motion } from "motion/react";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="relative min-h-screen">
       <Chat />
     </div>
   );

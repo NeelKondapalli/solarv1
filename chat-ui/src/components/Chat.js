@@ -61,7 +61,7 @@ const ChatBubble = ({ message, isUser }) => {
       exit={{ opacity: 0, y: -20 }}
       className={cn(
         "flex items-start gap-3 p-4 rounded-lg",
-        isUser ? "ml-auto max-w-[60%]" : "max-w-[70%]",
+        isUser ? "ml-auto max-w-[45%]" : "max-w-[55%]",
         isUser ? "bg-pink-600 text-white" : "bg-white border border-gray-200"
       )}
     >
@@ -230,182 +230,220 @@ export function Chat() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      {messages.length === 1 ? (
-        // Landing Screen - Centered Content
-        <div className="flex-1 flex items-center justify-center p-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-8"
-          >
-            <motion.div
-              initial={{ scale: 0.95 }}
-              animate={{ scale: 1 }}
-              className="text-center space-y-6 mb-12"
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-pink-600/10 via-pink-300/30 to-white bg-[length:400%_400%] bg-[position:0%_0%] animate-gradient">
+      <motion.div
+        layout
+        className="flex-1 flex items-center justify-center p-4 h-screen"
+        transition={{
+          layout: { duration: 0.7, ease: [0.4, 0, 0.2, 1] }
+        }}
+      >
+        <motion.div
+          layout
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.7,
+            ease: [0.4, 0, 0.2, 1]
+          }}
+          className={cn(
+            "mx-auto backdrop-blur-sm bg-white/60 rounded-2xl shadow-xl overflow-hidden border border-white/20",
+            messages.length === 1 
+              ? "w-full max-w-3xl p-8" 
+              : "w-full max-w-5xl h-[90vh] flex flex-col"
+          )}
+        >
+          {messages.length === 1 ? (
+            // Landing Screen Content
+            <motion.div 
+              layout
+              transition={{
+                duration: 0.7,
+                ease: [0.4, 0, 0.2, 1]
+              }}
             >
-              <div className="w-20 h-20 bg-pink-600 rounded-full mx-auto flex items-center justify-center mb-6">
-                <Sparkles className="w-10 h-10 text-white" />
-              </div>
-              <h1 className="text-4xl font-bold text-gray-900">
-                Welcome to Solar
-              </h1>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Your Flare DeFi Copilot. Ready to help with wallets, tokens, and swaps.
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-3xl mx-auto">
-              <ActionButton
-                icon={<ImageIcon className="w-5 h-5" />}
-                label="Generate Wallet"
-                onClick={() => {
-                  setValue("Generate a new wallet for me");
-                  //handleSend();
-                }}
-              />
-              <ActionButton
-                icon={<Figma className="w-5 h-5" />}
-                label="Send Tokens"
-                onClick={() => {
-                  setValue("Send 1 XYZ to 0x123...");
-                  //handleSend();
-                }}
-              />
-              <ActionButton
-                icon={<FileUp className="w-5 h-5" />}
-                label="Swap Tokens"
-                onClick={() => {
-                  setValue("Swap 1 ___ for ___");
-                  //handleSend();
-                }}
-              />
-              <ActionButton
-                icon={<MonitorIcon className="w-5 h-5" />}
-                label="Market Info"
-                onClick={() => {
-                  setValue("Show me the biggest movers recently");
-                  //handleSend();
-                }}
-              />
-             
-              <ActionButton
-                icon={<LineChart className="w-5 h-5" />}
-                label="Coin Info"
-                onClick={() => {
-                  setValue("Show me coin info for FLR");
-                  //handleSend();
-                }}
-              />
-            </div>
-
-            {/* Chat Input for Landing */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mt-12 max-w-2xl mx-auto"
-            >
-              <div className="relative flex items-end">
-                <textarea
-                  value={inputValue}
-                  onChange={(e) => setValue(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder={awaitingConfirmation ? "Type CONFIRM to proceed or anything else to cancel" : "Type your message..."}
-                  className="flex-1 p-4 pr-12 rounded-xl border border-gray-200 focus:border-pink-600 focus:ring-2 focus:ring-pink-600/20 resize-none shadow-sm"
-                  style={{ minHeight: '60px' }}
-                />
-                <button
-                  onClick={handleSend}
-                  disabled={!inputValue.trim() || isTyping}
-                  className={cn(
-                    "absolute right-3 bottom-3 p-2 rounded-lg transition-colors",
-                    inputValue.trim() && !isTyping
-                      ? "text-pink-600 hover:bg-pink-600/10"
-                      : "text-gray-400"
-                  )}
-                >
-                  <Send className="w-5 h-5" />
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      ) : (
-        // Chat Interface
-        <>
-          {/* Header */}
-          <motion.div
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-pink-600 flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-semibold text-gray-900">Solar</h1>
-                <p className="text-sm text-gray-500">DeFi Copilot for Flare</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            <AnimatePresence>
-              {messages.map((msg, idx) => (
-                <ChatBubble key={idx} message={msg} isUser={msg.isUser} />
-              ))}
-              {isTyping && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="flex items-center gap-2 text-sm text-gray-500"
-                >
-                  <div className="w-8 h-8 rounded-full bg-pink-600 flex items-center justify-center">
-                    <Bot className="w-5 h-5 text-white" />
-                  </div>
-                  <span>AI is typing...</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Chat Input */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="p-4 bg-white border-t border-gray-200"
-          >
-            <div className="relative flex items-end max-w-4xl mx-auto">
-              <textarea
-                value={inputValue}
-                onChange={(e) => setValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={awaitingConfirmation ? "Type CONFIRM to proceed or anything else to cancel" : "Type your message..."}
-                className="flex-1 p-3 pr-12 h-12 max-h-32 rounded-lg border border-gray-200 focus:border-pink-600 focus:ring-1 focus:ring-pink-600 resize-none"
-                style={{ minHeight: '48px' }}
-                disabled={isTyping}
-              />
-              <button
-                onClick={handleSend}
-                disabled={!inputValue.trim() || isTyping}
-                className={cn(
-                  "absolute right-2 bottom-2 p-2 rounded-md transition-colors",
-                  inputValue.trim() && !isTyping
-                    ? "text-pink-600 hover:bg-pink-600/10"
-                    : "text-gray-400"
-                )}
+              <motion.div
+                layout
+                className="text-center space-y-6 mb-12"
               >
-                <Send className="w-5 h-5" />
-              </button>
-            </div>
-          </motion.div>
-        </>
-      )}
+                <motion.div
+                  layout
+                  className="w-20 h-20 bg-pink-600 rounded-full mx-auto flex items-center justify-center mb-6"
+                >
+                  <Sparkles className="w-10 h-10 text-white" />
+                </motion.div>
+                <h1 className="text-4xl font-bold text-gray-900">
+                  Welcome to Solar
+                </h1>
+                <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                  Your Flare DeFi Copilot. Ready to help with wallets, tokens, and swaps.
+                </p>
+              </motion.div>
+
+              <motion.div
+                layout
+                className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-3xl mx-auto"
+              >
+                <ActionButton
+                  icon={<ImageIcon className="w-5 h-5" />}
+                  label="Generate Wallet"
+                  onClick={() => {
+                    setValue("Generate a new wallet for me");
+                    //handleSend();
+                  }}
+                />
+                <ActionButton
+                  icon={<Figma className="w-5 h-5" />}
+                  label="Send Tokens"
+                  onClick={() => {
+                    setValue("Send 1 XYZ to 0x123...");
+                    //handleSend();
+                  }}
+                />
+                <ActionButton
+                  icon={<FileUp className="w-5 h-5" />}
+                  label="Swap Tokens"
+                  onClick={() => {
+                    setValue("Swap 1 ___ for ___");
+                    //handleSend();
+                  }}
+                />
+                <ActionButton
+                  icon={<MonitorIcon className="w-5 h-5" />}
+                  label="Market Info"
+                  onClick={() => {
+                    setValue("Show me the biggest movers recently");
+                    //handleSend();
+                  }}
+                />
+               
+                <ActionButton
+                  icon={<LineChart className="w-5 h-5" />}
+                  label="Coin Info"
+                  onClick={() => {
+                    setValue("Show me coin info for FLR");
+                    //handleSend();
+                  }}
+                />
+              </motion.div>
+
+              {/* Chat Input for Landing */}
+              <motion.div
+                layout
+                className="mt-12 max-w-2xl mx-auto"
+              >
+                <div className="relative flex items-end">
+                  <textarea
+                    value={inputValue}
+                    onChange={(e) => setValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder={awaitingConfirmation ? "Type CONFIRM to proceed or anything else to cancel" : "Type your message..."}
+                    className="flex-1 p-4 pr-12 rounded-xl border border-gray-200 focus:border-pink-600 focus:ring-2 focus:ring-pink-600/20 resize-none shadow-sm"
+                    style={{ minHeight: '60px' }}
+                  />
+                  <button
+                    onClick={handleSend}
+                    disabled={!inputValue.trim() || isTyping}
+                    className={cn(
+                      "absolute right-3 bottom-3 p-2 rounded-lg transition-colors",
+                      inputValue.trim() && !isTyping
+                        ? "text-pink-600 hover:bg-pink-600/10"
+                        : "text-gray-400"
+                    )}
+                  >
+                    <Send className="w-5 h-5" />
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          ) : (
+            // Chat Interface
+            <motion.div 
+              layout
+              transition={{
+                duration: 0.7,
+                ease: [0.4, 0, 0.2, 1]
+              }}
+              className="flex flex-col h-full"
+            >
+              {/* Header */}
+              <motion.div
+                layout
+                className="flex items-center justify-between px-6 py-4 backdrop-blur-sm bg-white/40 border-b border-white/20"
+              >
+                <div className="flex items-center gap-3">
+                  <motion.div
+                    layout
+                    className="w-10 h-10 rounded-full bg-pink-600 flex items-center justify-center"
+                  >
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </motion.div>
+                  <div>
+                    <h1 className="text-xl font-semibold text-gray-900">Solar</h1>
+                    <p className="text-sm text-gray-500">DeFi Copilot for Flare</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Chat Messages */}
+              <motion.div
+                layout
+                className="flex-1 overflow-y-auto p-4 space-y-4 backdrop-blur-sm bg-white/20 min-h-0"
+              >
+                <AnimatePresence>
+                  {messages.map((msg, idx) => (
+                    <ChatBubble key={idx} message={msg} isUser={msg.isUser} />
+                  ))}
+                  {isTyping && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center gap-2 text-sm text-gray-500"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-pink-600 flex items-center justify-center">
+                        <Bot className="w-5 h-5 text-white" />
+                      </div>
+                      <span>AI is typing...</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <div ref={messagesEndRef} />
+              </motion.div>
+
+              {/* Chat Input */}
+              <motion.div
+                layout
+                className="p-4 backdrop-blur-sm bg-white/40 border-t border-white/20"
+              >
+                <div className="relative flex items-end">
+                  <textarea
+                    value={inputValue}
+                    onChange={(e) => setValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder={awaitingConfirmation ? "Type CONFIRM to proceed or anything else to cancel" : "Type your message..."}
+                    className="flex-1 p-3 pr-12 h-12 max-h-32 rounded-lg border border-white/20 focus:border-pink-600 focus:ring-1 focus:ring-pink-600 resize-none bg-white/50"
+                    style={{ minHeight: '48px' }}
+                    disabled={isTyping}
+                  />
+                  <button
+                    onClick={handleSend}
+                    disabled={!inputValue.trim() || isTyping}
+                    className={cn(
+                      "absolute right-2 bottom-2 p-2 rounded-md transition-colors",
+                      inputValue.trim() && !isTyping
+                        ? "text-pink-600 hover:bg-pink-600/10"
+                        : "text-gray-400"
+                    )}
+                  >
+                    <Send className="w-5 h-5" />
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </motion.div>
+      </motion.div>
     </div>
   );
 } 
