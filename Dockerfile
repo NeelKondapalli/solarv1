@@ -23,7 +23,6 @@ COPY --from=backend-builder /flare-ai-defai/.venv ./.venv
 COPY --from=backend-builder /flare-ai-defai/src ./src
 COPY --from=backend-builder /flare-ai-defai/pyproject.toml .
 COPY --from=backend-builder /flare-ai-defai/README.md .
-COPY --from=backend-builder /flare-ai-defai/.env ./.env
 
 # Copy frontend files
 COPY --from=frontend-builder /frontend/build /usr/share/nginx/html
@@ -35,7 +34,7 @@ COPY nginx.conf /etc/nginx/sites-enabled/default
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Allow workload operator to override environment variables
-LABEL "tee.launch_policy.allow_env_override"="GEMINI_API_KEY,GEMINI_MODEL,WEB3_PROVIDER_URL,WEB3_EXPLORER_URL,SIMULATE_ATTESTATION"
+LABEL "tee.launch_policy.allow_env_override"="GEMINI_API_KEY,GEMINI_MODEL,WEB3_PROVIDER_URL,WEB3_EXPLORER_URL,SIMULATE_ATTESTATION,FLARE_PRIVATE_KEY,FLARE_ADDRESS"
 LABEL "tee.launch_policy.log_redirect"="always"
 
 EXPOSE 80
