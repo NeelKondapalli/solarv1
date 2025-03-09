@@ -2,7 +2,7 @@
 FROM node:18-alpine AS frontend-builder
 WORKDIR /frontend
 COPY chat-ui/ .
-RUN npm install
+RUN npm install --legacy-peer-deps
 RUN npm run build
 
 # Stage 2: Build Backend
@@ -23,6 +23,7 @@ COPY --from=backend-builder /flare-ai-defai/.venv ./.venv
 COPY --from=backend-builder /flare-ai-defai/src ./src
 COPY --from=backend-builder /flare-ai-defai/pyproject.toml .
 COPY --from=backend-builder /flare-ai-defai/README.md .
+COPY --from=backend-builder /flare-ai-defai/.env ./.env
 
 # Copy frontend files
 COPY --from=frontend-builder /frontend/build /usr/share/nginx/html

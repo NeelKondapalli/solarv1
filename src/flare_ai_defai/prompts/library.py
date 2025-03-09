@@ -25,6 +25,8 @@ from flare_ai_defai.prompts.schemas import (
     SemanticRouterResponse,
     TokenSendResponse,
     TokenSwapResponse,
+    CoinInfoResponse,
+    MarketWatchResponse
 )
 from flare_ai_defai.prompts.templates import (
     CONVERSATIONAL,
@@ -34,6 +36,8 @@ from flare_ai_defai.prompts.templates import (
     TOKEN_SEND,
     TOKEN_SWAP,
     TX_CONFIRMATION,
+    COIN_INFO,
+    MARKET_WATCH
 )
 
 logger = structlog.get_logger(__name__)
@@ -148,6 +152,24 @@ class PromptLibrary:
                 response_schema=None,
                 response_mime_type=None,
                 category="account",
+            ),
+            Prompt(
+                name="coin_info",
+                description="Fetch coin info",
+                template=COIN_INFO,
+                required_inputs=["user_input"],
+                response_schema=CoinInfoResponse,
+                response_mime_type="application/json",
+                category="defai",
+            ),
+            Prompt(
+                name="market_watch",
+                description="Analyze market trends",
+                template=MARKET_WATCH,
+                required_inputs=["user_input"],
+                response_schema=MarketWatchResponse,
+                response_mime_type="application/json",
+                category="defai",
             ),
         ]
 

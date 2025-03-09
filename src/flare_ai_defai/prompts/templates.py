@@ -24,7 +24,18 @@ Categories (in order of precedence):
    • Must specifically request verification or attestation
    • Related to security or trust verification
 
-5. CONVERSATIONAL (default)
+5. MARKET_WATCH
+   • Keywords: market trends, price changes, market overview, performance
+   • Must be asking about general market performance or trends
+   • Should NOT mention specific coins (use COIN_INFO instead)
+   • Examples: "How's the market doing?", "Show me top performers"
+
+6. COIN_INFO
+   • Use when input asks for current market information on a specific coin
+   • Keywords: data, trends, coin, information, price
+   • Must have a specific coin ticker (Such as FLR, cFLR, ETH, BTC, and so on.)
+
+7. CONVERSATIONAL (default)
    • Use when input doesn't clearly match above categories
    • General questions, greetings, or unclear requests
    • Any ambiguous or multi-category inputs
@@ -242,4 +253,66 @@ Great news! Your transaction has been successfully confirmed. 🎉
 [See transaction on Explorer](${block_explorer}/tx/${tx_hash})
 
 Your transaction is now securely recorded on the blockchain.
+"""
+
+
+COIN_INFO: Final = """
+Extract token information from the input text.
+
+1. SOURCE TOKEN (token)
+   Valid formats:
+   • Native token: "FLR" or "flr"
+   • Listed pairs only: "USDC", "WFLR", "USDT", "sFLR", "WETH"
+   • Case-insensitive match
+   • Strip spaces and normalize to uppercase
+   • FAIL if token not recognized
+
+DO NOT accept more than one token. If more than one token is recognized in the prompt, tell the user that they must query token information one at a time.
+
+Input: ${user_input}
+
+Response Format: 
+{ 
+   "token": "<UPPERCASE_TOKEN_SYMBOL>"
+}
+
+Processing rules:
+- TOKEN ID MUST be present
+- DO NOT infer missing values
+- DO NOT allow same token pairs
+- Normalize token symbols to uppercase
+- FAIL if any more than one token, no token, missing or invalid
+
+Examples:
+✓ "Give me data on FLR" → {"token": "FLR"}
+✓ "I need info on usdt" → {"token": "USDT"}
+✓ "What is WFLR's price?" → {"token": "WFLR"}
+✓ "Show me sflr" → {"token": "SFLR"}
+
+✗ "Tell me about FLR and USDC" → FAIL (Only one token can be queried at a time)
+✗ "What is the latest price of BTC?" → FAIL (Token not recognized)
+✗ "Can you check the data?" → FAIL (Token ID must be present)
+✗ "I need data on WFLR and wflr" → FAIL (Duplicate token detected)
+"""
+
+MARKET_WATCH: Final = """
+Analyze the user's request for market trend information.
+
+The response should be empty JSON as the actual market analysis will be performed by the system.
+
+Input: ${user_input}
+
+Response Format:
+{}
+
+Processing rules:
+- Always return empty JSON object
+- All market analysis will be done by the system
+- This prompt is just for routing validation
+
+Examples:
+✓ "How's the market doing?" → {}
+✓ "Show me the top performers" → {}
+✓ "What are the market trends?" → {}
+✓ "Which coins are performing best?" → {}
 """

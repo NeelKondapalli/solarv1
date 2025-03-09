@@ -38,7 +38,29 @@ class SemanticRouterResponse(str, Enum):
     SWAP_TOKEN = "SwapToken"
     REQUEST_ATTESTATION = "RequestAttestation"
     CONVERSATIONAL = "Conversational"
+    COIN_INFO = "CoinInfo"
+    MARKET_WATCH = "MarketWatch"
 
+class MarketWatchResponse(TypedDict):
+    """
+    Type definition for market watch response.
+    This is an empty TypedDict as the actual market analysis
+    is performed by the system.
+    """
+    pass
+
+class CoinInfoResponse(TypedDict):
+    """
+    Type definition for coin information request parameters.
+
+    Defines the required fields for a coin information request, providing
+    type safety for the token symbol.
+
+    Attributes:
+        token (str): The token symbol to query
+    """
+
+    token: str
 
 class TokenSendResponse(TypedDict):
     """

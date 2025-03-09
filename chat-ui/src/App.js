@@ -8,7 +8,7 @@ const BACKEND_ROUTE = 'api/routes/chat/'
 const ChatInterface = () => {
   const [messages, setMessages] = useState([
     { 
-      text: "Hi, I'm Artemis! 👋 I'm your Copilot for Flare, ready to help you with operations like generating wallets, sending tokens, and executing token swaps. \n\n⚠️ While I aim to be accurate, never risk funds you can't afford to lose.",
+      text: "Hi, I'm Solar! 👋 I'm your Copilot for Flare, ready to help you with operations like generating wallets, sending tokens, and executing token swaps. \n\n⚠️ While I aim to be accurate, never risk funds you can't afford to lose.",
       type: 'bot' 
     }
   ]);
@@ -109,7 +109,7 @@ const ChatInterface = () => {
       <div className="flex flex-col h-full max-w-4xl mx-auto w-full shadow-lg bg-white">
         {/* Header */}
         <div className="bg-pink-600 text-white p-4">
-          <h1 className="text-xl font-bold">Artemis</h1>
+          <h1 className="text-xl font-bold">Solar</h1>
           <p className="text-sm opacity-80">DeFAI Copilot for Flare (gemini-2.0-flash)</p>
         </div>
 
