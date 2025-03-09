@@ -329,7 +329,7 @@ class ChatRouter:
         to_token = match.group(3).upper()
         
         # Validate tokens are supported
-        supported_tokens = ["FLR", "USDC", "JOULE", "WFLR"]  # Add more supported tokens as needed
+        supported_tokens = ["FLR", "USDC", "JOULE", "WFLR", "USDT", "WETH"]  # Add more supported tokens as needed
         if from_token not in supported_tokens or to_token not in supported_tokens:
             return {
                 "response": f"Unsupported tokens. Currently supported tokens: {', '.join(supported_tokens)}"
