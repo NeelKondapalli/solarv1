@@ -361,6 +361,8 @@ class ChatRouter:
             f"Token In: {from_token}\n"
             f"Token Out: {to_token}\n"
             f"Amount: {from_amount}{approval_notice}\n"
+            f"Transaction hash: {swap_tx[:10]}\n"
+            f"{swap_tx[10:]}"
             # f"Type CONFIRM SWAP to proceed."
         )
         self.context += formatted_preview + "\n"
