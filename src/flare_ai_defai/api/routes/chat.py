@@ -303,7 +303,7 @@ class ChatRouter:
         formatted_preview = (
             "Transaction Preview: "
             + f"Sending {Web3.from_wei(tx.get('value', 0), 'ether')} "
-            + f"FLR to {tx.get('to')}\nType CONFIRM TRANSACTION to proceed."
+            + f"FLR to {tx.get('to')}\nType CONFIRM to proceed."
         )
         self.context += formatted_preview + "\n"
         return {"response": formatted_preview}

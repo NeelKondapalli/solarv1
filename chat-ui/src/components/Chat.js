@@ -261,7 +261,7 @@ export function Chat() {
                 label="Generate Wallet"
                 onClick={() => {
                   setValue("Generate a new wallet for me");
-                  handleSend();
+                  //handleSend();
                 }}
               />
               <ActionButton
@@ -269,7 +269,7 @@ export function Chat() {
                 label="Send Tokens"
                 onClick={() => {
                   setValue("Send 1 XYZ to 0x123...");
-                  handleSend();
+                  //handleSend();
                 }}
               />
               <ActionButton
@@ -277,7 +277,7 @@ export function Chat() {
                 label="Swap Tokens"
                 onClick={() => {
                   setValue("Swap 1 ___ for ___");
-                  handleSend();
+                  //handleSend();
                 }}
               />
               <ActionButton
@@ -285,7 +285,7 @@ export function Chat() {
                 label="Market Info"
                 onClick={() => {
                   setValue("Show me the biggest movers recently");
-                  handleSend();
+                  //handleSend();
                 }}
               />
              
@@ -294,7 +294,7 @@ export function Chat() {
                 label="Coin Info"
                 onClick={() => {
                   setValue("Show me coin info for FLR");
-                  handleSend();
+                  //handleSend();
                 }}
               />
             </div>
