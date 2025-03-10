@@ -5,6 +5,8 @@ A verifiable, user-facing agent that abstracts and automates key financial workf
 
 Demo: https://www.loom.com/share/6de10ae187814ef59ef9e3a71f46a735?sid=a725a816-5e5f-41f0-90d2-da0486704175
 
+Showcase: https://dorahacks.io/buidl/23884
+
 $4000 award on the Decentralized Financial AI (DeFAI) track
 
   
