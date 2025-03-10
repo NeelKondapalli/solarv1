@@ -28,7 +28,7 @@ Runs within a Trusted Execution Environment (TEE) featuring remote attestation s
 
   
 
-##  🚀 Getting Started
+## 🖥️  Getting Started
 
   
 You can deploy Flare AI DeFAI using Docker (recommended) or set up the backend and frontend manually.
